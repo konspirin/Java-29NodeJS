@@ -1,4 +1,4 @@
-import {Employee, EmployeeDto} from "../model/Employee.js";
+import {Employee, EmployeeDto, SavedFiredEmployee} from "../model/Employee.js";
 import {Role} from "./timeControlTypes.js";
 import bcrypt from 'bcrypt'
 import {v4 as uuidv4} from 'uuid'
@@ -20,3 +20,16 @@ export const checkFiredEmployees = async(id:string) => {
     if(await FiredEmployeeModel.findOne({id}))
         throw new Error(JSON.stringify({status:409, message: "This employee was fired"}))
 }
+
+export const convertEmployeeToFiredEmployeeDto = (emp:Employee) => {
+    const firedEmp:SavedFiredEmployee = {
+        firstName: emp.firstName,
+        lastName: emp.lastName,
+        id: emp.id,
+        table_num:emp.table_num,
+        fireDate: new Date().toDateString()
+    }
+    return firedEmp;
+}
+
+export const getError = (status:number, message:string) => JSON.stringify({status,message})

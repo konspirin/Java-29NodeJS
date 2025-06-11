@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import {errorHandler} from "./errorHandler/errorHandler.js";
 import * as fs from "node:fs";
 import morgan from 'morgan'
+import {validateBody} from "./middleware/validation.js";
+import {joiSchemas} from "./utils/joiSchemas.js";
 
 export const launchServer = () => {
     const app = express();
@@ -19,7 +21,8 @@ export const launchServer = () => {
     //=============Middleware=============================
     app.use(morgan('dev'));
     app.use(morgan('combined', {stream: logStream}));
-    app.use(express.json())
+    app.use(express.json());
+    app.use(validateBody(joiSchemas));
     //===============Routing==============================
     app.use('/accounts', accountRouter)
     //==============ErrorHandler===================

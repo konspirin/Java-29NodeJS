@@ -19,5 +19,7 @@ export type EmployeeDto = {
 export type SavedFiredEmployee = {
     firstName: string,
     lastName: string,
-    id: string
+    id: string,
+    table_num:string
+    fireDate?:string,
 }

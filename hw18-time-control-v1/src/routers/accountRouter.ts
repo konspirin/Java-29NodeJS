@@ -16,3 +16,26 @@ accountRouter.get('/', asyncHandler(async (req: Request, res: Response) => {
     const result = await controller.getAllEmployees();
     res.json(result)
 }))
+
+accountRouter.put('/', asyncHandler(async (req: Request, res: Response) => {
+const body = req.body as EmployeeDto;
+    const result = await controller.updateEmployee(body);
+    res.json(result)
+}))
+
+accountRouter.get('/account', asyncHandler(async (req: Request, res: Response) => {
+    const {id} = req.query;
+    const result = await  controller.getEmployeeById(id as string)
+    res.json(result)
+}))
+accountRouter.patch('/account', asyncHandler(async (req: Request, res: Response) =>{
+    const {id} = req.query;
+    await controller.changePassword(id as string, req.body.newPassword as string)
+    res.send();
+}))
+
+accountRouter.delete('/account', asyncHandler(async (req: Request, res: Response) =>{
+    const {id} = req.query;
+   const result =  await controller.deleteEmployee(id as string)
+    res.json(result);
+}))

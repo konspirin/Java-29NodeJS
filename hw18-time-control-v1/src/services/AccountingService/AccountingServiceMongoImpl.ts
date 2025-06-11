@@ -1,16 +1,26 @@
 import {AccountingService} from "./AccountingService.js";
 import {Employee, EmployeeDto, SavedFiredEmployee} from "../../model/Employee.js";
-import {EmployeeModel} from "../../model/mongoSchemas.js";
-import {checkFiredEmployees} from "../../utils/tools.js";
+import {EmployeeModel, FiredEmployeeModel} from "../../model/mongoSchemas.js";
+import {checkFiredEmployees, convertEmployeeToFiredEmployeeDto, getError} from "../../utils/tools.js";
+import bcrypt from "bcrypt";
 
 export class AccountingServiceMongoImpl implements AccountingService{
 
-    changePassword(empId: string, newPassword: string): Promise<void> {
-        return Promise.resolve(undefined);
+    async changePassword(empId: string, newPassword: string): Promise<void> {
+        await this.getEmployeeById(empId);
+       const res = await EmployeeModel.updateOne({id:empId},{
+            hash: await bcrypt.hash(newPassword, bcrypt.genSaltSync(10))
+        }).exec()
+        if(!res) throw new Error(getError(500,"Password not updated"))
     }
 
-    fireEmployee(empId: string): Promise<SavedFiredEmployee> {
-        throw ""
+    async fireEmployee(empId: string): Promise<SavedFiredEmployee> {
+        const emp = await this.getEmployeeById(empId);
+        const firedEmp = convertEmployeeToFiredEmployeeDto(emp);
+        await EmployeeModel.findOneAndDelete({id:empId}).exec();
+        const firedEmpDoc = new FiredEmployeeModel(firedEmp);
+        await firedEmpDoc.save();
+        return firedEmp;
     }
 
     async getAllEmployees(): Promise<SavedFiredEmployee[]> {
@@ -18,8 +28,10 @@ export class AccountingServiceMongoImpl implements AccountingService{
         return Promise.resolve(result);
     }
 
-    getEmployeeById(id: string): Promise<Employee> {
-        throw ""
+    async getEmployeeById(id: string): Promise<Employee> {
+        const result = await EmployeeModel.findOne({id});
+        if(!result) throw new Error(getError(404, `Employee with id ${id} not found`))
+        return result as Employee
     }
 
     async hireEmployee(employee: Employee): Promise<Employee> {
@@ -36,11 +48,20 @@ export class AccountingServiceMongoImpl implements AccountingService{
     }
 
     setRole(newRole: string): Promise<Employee> {
+        //ToDo
         throw ""
     }
 
-    updateEmployee(empId: string, employee: EmployeeDto): Promise<Employee> {
-        throw ""
+    async updateEmployee(empId: string, employee: EmployeeDto): Promise<Employee> {
+        const emp = await EmployeeModel.findOne({id:empId})
+        if(!emp) throw new Error(getError(404, `Employee with id ${empId} not found`))
+
+        const updated = await EmployeeModel.findByIdAndUpdate(emp._id, {
+            firstName : employee.firstName,
+            lastName : employee.lastName
+        }, {new:true}).exec();
+        if(!updated)throw new Error(getError(500, "Employee updating failed!"))
+        return updated as Employee
     }
 
 }
