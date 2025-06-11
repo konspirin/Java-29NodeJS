@@ -8,6 +8,6 @@ export class AccountController {
 
     async addEmployee(body: EmployeeDto) {
         const employee = await convertEmployeeDtoToEmployee(body);
-        const result = await this.service.hireEmployee(employee)
+        return await this.service.hireEmployee(employee)
     }
 }

@@ -8,6 +8,6 @@ const controller = new AccountController();
 
 accountRouter.post('/', asyncHandler(async (req:Request, res:Response) => {
         const body = req.body as EmployeeDto
-    const result = controller.addEmployee(body);
+    const result = await controller.addEmployee(body);
         res.status(201).json(result)
 }))

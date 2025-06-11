@@ -22,11 +22,12 @@ export class AccountingServiceMongoImpl implements AccountingService{
     }
 
     async hireEmployee(employee: Employee): Promise<Employee> {
+
         await checkFiredEmployees(employee.id)
-            if (await EmployeeModel.findOne({tabNum: employee.table_num}))
+            if (await EmployeeModel.findOne({id: employee.id}))
                 throw new Error(JSON.stringify({
                     status: 409,
-                    message: `Employee with tab number ${employee.table_num} already exists`
+                    message: `Employee with tab number ${employee.id} already exists`
                 }))
                 const employeeDoc = new EmployeeModel(employee)
                 await employeeDoc.save();

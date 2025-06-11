@@ -6,9 +6,9 @@ export const EmployeeMongoSchema = new mongoose.Schema({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     id: {type: String, required: true},
-    tabNum:{type:String, required: true},
+    table_num:{type:String, required: true},
     roles:{type:[String], enum: Role, required: true},
-    passHash:{type:String, required: true}
+    hash:{type:String, required: true}
 }, {versionKey:false})
 
 export const EmployeeModel = mongoose.model<Employee>('Employees', EmployeeMongoSchema, 'employees_accounting')
