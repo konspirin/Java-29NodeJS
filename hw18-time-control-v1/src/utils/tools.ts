@@ -1,4 +1,22 @@
+import {Employee, EmployeeDto} from "../model/Employee.js";
+import {Role} from "./timeControlTypes.js";
+import bcrypt from 'bcrypt'
+import {v4 as uuidv4} from 'uuid'
+import {FiredEmployeeModel, FiredEmployeeMongoSchema} from "../model/mongoSchemas.js";
 
-export const sayHi = (name:string):void => {
-    console.log(`Hello, ${name}`)
+export const convertEmployeeDtoToEmployee = async (dto: EmployeeDto) => {
+    const employee: Employee = {
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        hash: await bcrypt.hash(dto.password, bcrypt.genSaltSync(10)),
+        id: dto.id,
+        roles: [Role.CREW],
+        table_num: uuidv4()
+    }
+    return employee;
+}
+
+export const checkFiredEmployees = async(id:string) => {
+    if(await FiredEmployeeModel.findOne({id}))
+        throw new Error(JSON.stringify({status:409, message: "This employee was fired"}))
 }
