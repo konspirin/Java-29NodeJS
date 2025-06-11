@@ -11,3 +11,8 @@ accountRouter.post('/', asyncHandler(async (req:Request, res:Response) => {
     const result = await controller.addEmployee(body);
         res.status(201).json(result)
 }))
+
+accountRouter.get('/', asyncHandler(async (req: Request, res: Response) => {
+    const result = await controller.getAllEmployees();
+    res.json(result)
+}))

@@ -10,4 +10,8 @@ export class AccountController {
         const employee = await convertEmployeeDtoToEmployee(body);
         return await this.service.hireEmployee(employee)
     }
+
+    async getAllEmployees() {
+        return await this.service.getAllEmployees();
+    }
 }

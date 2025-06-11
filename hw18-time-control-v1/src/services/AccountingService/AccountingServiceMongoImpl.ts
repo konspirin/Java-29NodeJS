@@ -13,8 +13,9 @@ export class AccountingServiceMongoImpl implements AccountingService{
         throw ""
     }
 
-    getAllEmployees(): Promise<SavedFiredEmployee[]> {
-        return Promise.resolve([]);
+    async getAllEmployees(): Promise<SavedFiredEmployee[]> {
+        const result: Employee[] = await EmployeeModel.find({})
+        return Promise.resolve(result);
     }
 
     getEmployeeById(id: string): Promise<Employee> {
