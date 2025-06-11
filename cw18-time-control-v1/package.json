@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ./build/app.js",
-    "dev": "tsx watch ./src/app.ts dev"
+    "start": "tsc && node ./build/app.js"
   },
   "type": "module",
   "keywords": [],
@@ -18,9 +17,5 @@
     "express": "^5.1.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "mongoose": "^8.15.1"
   }
 }
