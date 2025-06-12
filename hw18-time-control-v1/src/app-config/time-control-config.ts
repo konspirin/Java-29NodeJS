@@ -1,4 +1,4 @@
-import confJson from '../../config/time-control-config.json'
+import confJson from '../../config/time-control-config.json' with {type:'json'}
 import dotenv from 'dotenv'
 
 export interface AppConfig {
