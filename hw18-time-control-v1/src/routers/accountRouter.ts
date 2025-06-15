@@ -39,3 +39,9 @@ accountRouter.delete('/account', asyncHandler(async (req: Request, res: Response
    const result =  await controller.deleteEmployee(id as string)
     res.json(result);
 }))
+
+accountRouter.patch('/role', asyncHandler(async (req: Request, res: Response) =>{
+    const {id, newRole} = req.query;
+    const result =  await controller.setRole(id as string, newRole as string)
+    res.json(result);
+}))

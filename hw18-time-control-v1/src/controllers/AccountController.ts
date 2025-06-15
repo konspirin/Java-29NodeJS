@@ -1,7 +1,7 @@
 import {AccountingServiceMongoImpl} from "../services/AccountingService/AccountingServiceMongoImpl.js";
 import {AccountingService} from "../services/AccountingService/AccountingService.js";
 import {EmployeeDto} from "../model/Employee.js";
-import {convertEmployeeDtoToEmployee} from "../utils/tools.js";
+import {checkRole, convertEmployeeDtoToEmployee} from "../utils/tools.js";
 
 export class AccountController {
     private service:AccountingService = new AccountingServiceMongoImpl()
@@ -29,5 +29,9 @@ export class AccountController {
 
     async deleteEmployee(id: string) {
         return await this.service.fireEmployee(id)
+    }
+
+    async setRole(id: string, newRole: string) {
+        return await this.service.setRole(id, newRole)
     }
 }

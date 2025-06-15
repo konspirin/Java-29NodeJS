@@ -7,6 +7,6 @@ export interface AccountingService {
     changePassword:  (empId:string , newPassword: string) => Promise<void>;
     getEmployeeById: (id: string) => Promise<Employee>;
     getAllEmployees: () => Promise<SavedFiredEmployee[]>;
-    setRole: (newRole:string) => Promise<Employee>;
+    setRole: (id:string, newRole:string) => Promise<Employee>;
 
 }

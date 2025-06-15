@@ -33,3 +33,9 @@ export const convertEmployeeToFiredEmployeeDto = (emp:Employee) => {
 }
 
 export const getError = (status:number, message:string) => JSON.stringify({status,message})
+
+export const checkRole = (role:string) => {
+    const newRole = Object.values(Role).find(r => r === role)
+    if(!newRole) throw new Error(getError(400, "Wrong role!"))
+    return newRole;
+}

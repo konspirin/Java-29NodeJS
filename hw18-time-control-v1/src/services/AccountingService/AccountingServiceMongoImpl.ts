@@ -1,7 +1,7 @@
 import {AccountingService} from "./AccountingService.js";
 import {Employee, EmployeeDto, SavedFiredEmployee} from "../../model/Employee.js";
 import {EmployeeModel, FiredEmployeeModel} from "../../model/mongoSchemas.js";
-import {checkFiredEmployees, convertEmployeeToFiredEmployeeDto, getError} from "../../utils/tools.js";
+import {checkFiredEmployees, checkRole, convertEmployeeToFiredEmployeeDto, getError} from "../../utils/tools.js";
 import bcrypt from "bcrypt";
 
 export class AccountingServiceMongoImpl implements AccountingService{
@@ -47,9 +47,16 @@ export class AccountingServiceMongoImpl implements AccountingService{
                 return employee;
     }
 
-    setRole(newRole: string): Promise<Employee> {
-        //ToDo
-        throw ""
+    async setRole(id: string, newRole: string): Promise<Employee> {
+        const emp = await this.getEmployeeById(id)
+        const role = checkRole(newRole);
+        console.log(emp.roles)
+        emp.roles.push(role);
+        const updated = await EmployeeModel.findOneAndUpdate({id}, {
+          $set:{roles: emp.roles}
+        }, {new:true}).exec();
+        if(!updated)throw new Error(getError(500, "Employee updating failed!"))
+        return updated as Employee
     }
 
     async updateEmployee(empId: string, employee: EmployeeDto): Promise<Employee> {
